@@ -12,7 +12,7 @@ Dibangun untuk **Unity 6 LTS (6000.0 LTS)** dengan **URP (Forward+)**, **Unity N
 - [x] **Fase 1 — Movement, Dodge, Soft Lock-On & Combat Feel** — lihat [`SETUP_FASE1.md`](SETUP_FASE1.md)
 - [x] **Fase 2 — ZZZ Core Combat & Squad Switch (3 Agen)** — lihat [`SETUP_FASE2_FASE3.md`](SETUP_FASE2_FASE3.md)
 - [x] **Fase 3 — Enemy AI, Golden/Red Telegraph, Defensive Assist Parry & Daze/Chain Attack** — lihat [`SETUP_FASE2_FASE3.md`](SETUP_FASE2_FASE3.md)
-- [ ] **Fase 4 — Distrik Kota Semi-Open World, Siklus Neon Siang-Malam & Anomaly Rift**
+- [x] **Fase 4 — Distrik Kota Semi-Open World, Siklus Neon Siang-Malam, Anomaly Rift & Fast Travel** — lihat [`SETUP_FASE4.md`](SETUP_FASE4.md)
 - [ ] **Fase 5 — Markas Kafe, NPC, Misi & Save/Load JSON**
 - [ ] **Fase 6 — Anime Polish (VRoid + lilToon + URP Bloom + SFX)**
 
@@ -40,8 +40,17 @@ Assets/_Project/Scripts/
 ├── AI/
 │   ├── TelegraphSystem.cs           # Sinyal GoldenFlash (Parryable) & RedFlash (Must Dodge)
 │   └── EnemyAIController.cs         # FSM Musuh (Chase, Telegraph, Strike, Recover, Stunned, Dead)
+├── City/
+│   ├── IInteractable.cs             # Kontrak interaksi universal [F]
+│   ├── PlayerInteractor.cs          # Deteksi objek interaktif terdekat tanpa GC allocation
+│   ├── CityEconomyInventory.cs      # Penyimpanan Credits, Anomaly Cores & Data Disks
+│   ├── DayNightNeonController.cs    # Siklus Siang–Sore–Malam + lampu & papan neon URP Forward+
+│   ├── AnomalyRiftZone.cs           # Encounter multi-wave Anomaly Rift di jalanan kota
+│   ├── AnomalyCrate.cs              # Peti loot kota (terkunci sampai Rift selesai)
+│   ├── MetroFastTravelStop.cs       # Node halte bus/stasiun metro Fast Travel
+│   └── FastTravelManager.cs         # Koordinator teleport aman antar halte distrik
 └── UI/
-    └── CombatHUDDebugOverlay.cs     # HUD siap pakai untuk uji greybox Fase 2 & 3
+    └── CombatHUDDebugOverlay.cs     # HUD siap pakai (Squad, Clock, Loot, Rift, [F] Prompt & Fast Travel)
 ```
 
 ---
@@ -52,4 +61,4 @@ Assets/_Project/Scripts/
    ```bash
    git clone https://github.com/syahreza-za/Project-Neo-Veil.git
    ```
-2. Ikuti [`SETUP_FASE1.md`](SETUP_FASE1.md) untuk membuat proyek **Unity 6 LTS (Universal 3D URP Forward+)**, lalu lanjutkan dengan [`SETUP_FASE2_FASE3.md`](SETUP_FASE2_FASE3.md).
+2. Ikuti panduan berurutan: [`SETUP_FASE1.md`](SETUP_FASE1.md) → [`SETUP_FASE2_FASE3.md`](SETUP_FASE2_FASE3.md) → [`SETUP_FASE4.md`](SETUP_FASE4.md).
