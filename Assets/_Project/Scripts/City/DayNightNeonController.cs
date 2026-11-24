@@ -39,7 +39,19 @@ namespace NeoVeil.City
         [SerializeField] private Color defaultNeonEmissionColor = new Color(0.15f, 0.85f, 1.0f);
         [SerializeField, Min(0f)] private float maxEmissionBoost = 3.2f;
 
+        [Header("Urban Anime Skybox Colors (Auto-Drives UrbanAnimeSkyboxURP.shader)")]
+        [SerializeField] private Color daySkyTop = new Color(0.14f, 0.45f, 0.92f);
+        [SerializeField] private Color daySkyHorizon = new Color(0.58f, 0.82f, 1.0f);
+        [SerializeField] private Color duskSkyTop = new Color(0.16f, 0.10f, 0.30f);
+        [SerializeField] private Color duskSkyHorizon = new Color(0.95f, 0.36f, 0.50f);
+        [SerializeField] private Color nightSkyTop = new Color(0.03f, 0.05f, 0.14f);
+        [SerializeField] private Color nightSkyHorizon = new Color(0.24f, 0.12f, 0.38f);
+
         private static readonly int EmissionColorProp = Shader.PropertyToID("_EmissionColor");
+        private static readonly int SkyTopColorProp = Shader.PropertyToID("_TopColor");
+        private static readonly int SkyHorizonColorProp = Shader.PropertyToID("_HorizonColor");
+        private static readonly int SkyBottomColorProp = Shader.PropertyToID("_BottomColor");
+        private static readonly int SkyStarIntensityProp = Shader.PropertyToID("_StarIntensity");
         private string _lastPeriodName = string.Empty;
 
         public float TimeOfDay => timeOfDay;
@@ -109,7 +121,7 @@ namespace NeoVeil.City
                 sunLight.intensity = Mathf.Lerp(nightMoonIntensity, daySunIntensity, dayFactor);
             }
 
-            // 2. Ambient & Fog
+            // 2. Ambient, Fog & Procedural Anime Skybox
             Color baseAmb = Color.Lerp(nightAmbient, dayAmbient, dayFactor);
             Color finalAmb = Color.Lerp(baseAmb, duskAmbient, duskFactor * 0.8f);
             RenderSettings.ambientLight = finalAmb;
@@ -117,6 +129,17 @@ namespace NeoVeil.City
             if (controlFogColor)
             {
                 RenderSettings.fogColor = finalAmb;
+            }
+
+            Material skyMat = RenderSettings.skybox;
+            if (skyMat != null && skyMat.HasProperty(SkyTopColorProp))
+            {
+                Color topCol = Color.Lerp(Color.Lerp(nightSkyTop, daySkyTop, dayFactor), duskSkyTop, duskFactor * 0.85f);
+                Color horCol = Color.Lerp(Color.Lerp(nightSkyHorizon, daySkyHorizon, dayFactor), duskSkyHorizon, duskFactor * 0.9f);
+                skyMat.SetColor(SkyTopColorProp, topCol);
+                skyMat.SetColor(SkyHorizonColorProp, horCol);
+                if (skyMat.HasProperty(SkyBottomColorProp)) skyMat.SetColor(SkyBottomColorProp, finalAmb * 0.6f);
+                if (skyMat.HasProperty(SkyStarIntensityProp)) skyMat.SetFloat(SkyStarIntensityProp, neonPower * 1.4f);
             }
 
             // 3. Urban Streetlights & Neon Lamps

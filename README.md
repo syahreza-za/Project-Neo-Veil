@@ -15,6 +15,7 @@ Dibangun untuk **Unity 6 LTS (6000.0 LTS)** dengan **URP (Forward+)**, **Unity N
 - [x] **Fase 4 — Distrik Kota Semi-Open World, Siklus Neon Siang-Malam, Anomaly Rift & Fast Travel** — lihat [`SETUP_FASE4.md`](SETUP_FASE4.md)
 - [x] **Fase 5 — Markas Cafe 07, NPC, Dialog, Kontrak Misi, Upgrade Agen & Save/Load JSON** — lihat [`SETUP_FASE5.md`](SETUP_FASE5.md)
 - [x] **Fase 6 — Anime Polish (1-Click Bootstrap, Audio/BGM, VFX, Animator VRoid+Mixamo, URP Bloom & Build Demo)** — lihat [`SETUP_FASE6_POLISH.md`](SETUP_FASE6_POLISH.md)
+- [x] **Custom URP Anime Shaders & Panduan Aset 3D Gratis** — lihat [`FREE_ASSETS_GUIDE.md`](FREE_ASSETS_GUIDE.md) (`AnimeCelOutlineURP.shader` & `UrbanAnimeSkyboxURP.shader`)
 
 ---
 
