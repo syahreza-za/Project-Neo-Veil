@@ -63,6 +63,7 @@ namespace NeoVeil.City
         public bool CanInteract => !IsEncounterActive && (!IsCleared || allowReplayAfterClear);
         public Transform InteractionTransform => transform;
 
+        public static event Action<AnomalyRiftZone> OnAnyRiftCleared;
         public event Action<AnomalyRiftZone, int> OnWaveStarted;
         public event Action<AnomalyRiftZone> OnRiftCleared;
 
@@ -185,6 +186,7 @@ namespace NeoVeil.City
             RefreshVisual();
             Debug.Log($"[NeoVeil Rift] {riftName} STABILIZED!");
             OnRiftCleared?.Invoke(this);
+            OnAnyRiftCleared?.Invoke(this);
         }
 
         private static GameObject CreateFallbackGreyboxEnemy(Vector3 pos, string enemyName, int enemyLayer)

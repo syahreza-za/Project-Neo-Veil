@@ -13,8 +13,8 @@ Dibangun untuk **Unity 6 LTS (6000.0 LTS)** dengan **URP (Forward+)**, **Unity N
 - [x] **Fase 2 — ZZZ Core Combat & Squad Switch (3 Agen)** — lihat [`SETUP_FASE2_FASE3.md`](SETUP_FASE2_FASE3.md)
 - [x] **Fase 3 — Enemy AI, Golden/Red Telegraph, Defensive Assist Parry & Daze/Chain Attack** — lihat [`SETUP_FASE2_FASE3.md`](SETUP_FASE2_FASE3.md)
 - [x] **Fase 4 — Distrik Kota Semi-Open World, Siklus Neon Siang-Malam, Anomaly Rift & Fast Travel** — lihat [`SETUP_FASE4.md`](SETUP_FASE4.md)
-- [ ] **Fase 5 — Markas Kafe, NPC, Misi & Save/Load JSON**
-- [ ] **Fase 6 — Anime Polish (VRoid + lilToon + URP Bloom + SFX)**
+- [x] **Fase 5 — Markas Cafe 07, NPC, Dialog, Kontrak Misi, Upgrade Agen & Save/Load JSON** — lihat [`SETUP_FASE5.md`](SETUP_FASE5.md)
+- [ ] **Fase 6 — Anime Polish (VRoid + lilToon + URP Bloom + Audio/VFX + Build Demo)**
 
 ---
 
@@ -24,12 +24,13 @@ Dibangun untuk **Unity 6 LTS (6000.0 LTS)** dengan **URP (Forward+)**, **Unity N
 Assets/_Project/Scripts/
 ├── Core/
 │   ├── InputReader.cs               # Wrapper Unity New Input System (default ZZZ/NTE bindings + 1/2/3)
-│   └── TimeScaleManager.cs          # Hitstop (45–65ms) & Perfect Dodge / Chain Slow-Motion
+│   ├── TimeScaleManager.cs          # Hitstop (45–65ms) & Perfect Dodge / Chain Slow-Motion
+│   └── SaveSystem.cs                # Save/Load JSON lokal (posisi, waktu, loot, squad, misi — F5/F9)
 ├── Player/
 │   └── PlayerMovementController.cs  # Third-person controller, 2-charge Dodge + i-frame, Attack Lunge
 ├── Squad/
 │   ├── AgentDataSO.cs               # ScriptableObject data Agen (Striker / Breaker / Channeler)
-│   ├── SquadManager.cs              # Squad 3 Agen, Quick Switch, Defensive Assist Parry, Decibel
+│   ├── SquadManager.cs              # Squad 3 Agen, Quick Switch, Assist Parry, Leveling & Decibel
 │   └── ChainAttackController.cs     # Jendela slow-mo Chain Attack saat Daze musuh 100%
 ├── Combat/
 │   ├── AttackDataSO.cs              # ScriptableObject data serangan (damage, daze, hitstop, lunge)
@@ -48,9 +49,16 @@ Assets/_Project/Scripts/
 │   ├── AnomalyRiftZone.cs           # Encounter multi-wave Anomaly Rift di jalanan kota
 │   ├── AnomalyCrate.cs              # Peti loot kota (terkunci sampai Rift selesai)
 │   ├── MetroFastTravelStop.cs       # Node halte bus/stasiun metro Fast Travel
-│   └── FastTravelManager.cs         # Koordinator teleport aman antar halte distrik
+│   ├── FastTravelManager.cs         # Koordinator teleport aman antar halte distrik
+│   └── CafeHubTerminal.cs           # Terminal Markas Cafe 07 (Rest/Heal, Upgrade Agen, Save/Load)
+├── Quest/
+│   ├── DialogueDataSO.cs            # ScriptableObject baris dialog NPC
+│   ├── DialogueManager.cs           # Pemutar dialog visual-novel & pengunci gerak sementara
+│   ├── MissionDataSO.cs             # ScriptableObject kontrak misi utama & sampingan
+│   ├── MissionManager.cs            # Pelacak kontrak otomatis (Rift, Crate, Assist Parry, NPC)
+│   └── CityNpcInteractable.cs       # NPC interaktif kota & Cafe 07
 └── UI/
-    └── CombatHUDDebugOverlay.cs     # HUD siap pakai (Squad, Clock, Loot, Rift, [F] Prompt & Fast Travel)
+    └── CombatHUDDebugOverlay.cs     # HUD lengkap greybox (Squad, Clock, Contracts, Dialogue, Fast Travel & Cafe Hub)
 ```
 
 ---
@@ -61,4 +69,4 @@ Assets/_Project/Scripts/
    ```bash
    git clone https://github.com/syahreza-za/Project-Neo-Veil.git
    ```
-2. Ikuti panduan berurutan: [`SETUP_FASE1.md`](SETUP_FASE1.md) → [`SETUP_FASE2_FASE3.md`](SETUP_FASE2_FASE3.md) → [`SETUP_FASE4.md`](SETUP_FASE4.md).
+2. Ikuti panduan berurutan: [`SETUP_FASE1.md`](SETUP_FASE1.md) → [`SETUP_FASE2_FASE3.md`](SETUP_FASE2_FASE3.md) → [`SETUP_FASE4.md`](SETUP_FASE4.md) → [`SETUP_FASE5.md`](SETUP_FASE5.md).

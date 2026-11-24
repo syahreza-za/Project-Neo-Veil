@@ -56,8 +56,17 @@ namespace NeoVeil.City
 
         public bool TrySpendCredits(int amount)
         {
-            if (amount <= 0 || credits < amount) return false;
-            credits -= amount;
+            return TrySpendResources(amount, 0, 0);
+        }
+
+        public bool TrySpendResources(int creditsCost, int coresCost = 0, int disksCost = 0)
+        {
+            if (creditsCost < 0 || coresCost < 0 || disksCost < 0) return false;
+            if (credits < creditsCost || anomalyCores < coresCost || dataDisks < disksCost) return false;
+
+            credits -= creditsCost;
+            anomalyCores -= coresCost;
+            dataDisks -= disksCost;
             OnInventoryChanged?.Invoke();
             return true;
         }

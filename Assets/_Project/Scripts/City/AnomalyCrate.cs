@@ -38,6 +38,7 @@ namespace NeoVeil.City
         public bool CanInteract => !IsOpened && !IsLocked;
         public Transform InteractionTransform => transform;
 
+        public static event Action<AnomalyCrate> OnAnyCrateOpened;
         public event Action<AnomalyCrate> OnOpened;
 
         private void Awake()
@@ -77,6 +78,7 @@ namespace NeoVeil.City
             }
 
             OnOpened?.Invoke(this);
+            OnAnyCrateOpened?.Invoke(this);
         }
 
         public void MarkOpenedFromSave()

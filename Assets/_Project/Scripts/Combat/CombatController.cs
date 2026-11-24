@@ -235,7 +235,7 @@ namespace NeoVeil.Combat
 
                 var payload = new DamagePayload
                 {
-                    RawDamage = agent.attackPower * attack.damageMultiplier * squadManager.TeamAttackMultiplier,
+                    RawDamage = squadManager.ActiveAttackPower * attack.damageMultiplier * squadManager.TeamAttackMultiplier,
                     RawDaze = attack.baseDaze,
                     DazeMultiplier = agent.dazeMultiplier,
                     StunDamageMultiplier = agent.stunDamageMultiplier,

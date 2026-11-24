@@ -11,11 +11,14 @@ namespace NeoVeil.Squad
     public class AgentRuntimeState
     {
         public AgentDataSO Data;
+        public int Level = 1;
         public float CurrentHP;
         public float CurrentEnergy;
         public GameObject VisualInstance;
 
-        public float NormalizedHP => Data != null && Data.maxHP > 0f ? CurrentHP / Data.maxHP : 0f;
+        public float EffectiveMaxHP => Data != null ? Data.maxHP + (Level - 1) * 110f : 1000f;
+        public float EffectiveAttackPower => Data != null ? Data.attackPower + (Level - 1) * 12f : 70f;
+        public float NormalizedHP => EffectiveMaxHP > 0f ? CurrentHP / EffectiveMaxHP : 0f;
         public float NormalizedEnergy => Data != null && Data.maxEnergy > 0f ? CurrentEnergy / Data.maxEnergy : 0f;
         public bool IsAlive => CurrentHP > 0f;
     }
@@ -25,7 +28,7 @@ namespace NeoVeil.Squad
     /// - Quick Switch (Tab/C or 1/2/3) preserving exact player position and rotation
     /// - Defensive Assist Parry when switching during an enemy's GoldenFlash telegraph
     /// - Routes switch presses into ChainAttackController when a Chain Attack prompt is active
-    /// - Shared Squad Decibel (Ultimate) gauge and Channeler Team ATK Buff
+    /// - Shared Squad Decibel (Ultimate) gauge, Agent Leveling/Upgrades, and Channeler Team ATK Buff
     /// </summary>
     public class SquadManager : MonoBehaviour
     {
@@ -61,6 +64,7 @@ namespace NeoVeil.Squad
         public int AgentCount => _states != null ? _states.Length : 0;
         public AgentRuntimeState ActiveState => _states != null && _states.Length > 0 ? _states[ActiveIndex] : null;
         public AgentDataSO ActiveAgent => ActiveState?.Data;
+        public float ActiveAttackPower => ActiveState != null ? ActiveState.EffectiveAttackPower : 70f;
         public float Decibel => _decibel;
         public float NormalizedDecibel => _decibel / 100f;
         public bool HasTeamAttackBuff => _teamBuffTimer > 0f;
@@ -172,6 +176,55 @@ namespace NeoVeil.Squad
             OnSquadStatsChanged?.Invoke();
         }
 
+        /// <summary>
+        /// Fully restores HP and minimum starting Energy for all 3 Squad Agents (used at Cafe 07 Hub).
+        /// </summary>
+        public void HealAllAgentsToFull()
+        {
+            if (_states == null) return;
+            for (int i = 0; i < _states.Length; i++)
+            {
+                _states[i].CurrentHP = _states[i].EffectiveMaxHP;
+                _states[i].CurrentEnergy = Mathf.Max(_states[i].CurrentEnergy, _states[i].Data.startingEnergy);
+            }
+            OnSquadStatsChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Levels up the chosen agent (+110 MaxHP, +12 ATK per level) and heals them to full.
+        /// </summary>
+        public bool UpgradeAgentLevel(int index)
+        {
+            if (_states == null || index < 0 || index >= _states.Length) return false;
+            _states[index].Level++;
+            _states[index].CurrentHP = _states[index].EffectiveMaxHP;
+            OnSquadStatsChanged?.Invoke();
+            return true;
+        }
+
+        public void RestoreSquadFromSave(int activeIdx, float savedDecibel, int[] levels, float[] hps, float[] energies)
+        {
+            if (_states == null) return;
+            _decibel = Mathf.Clamp(savedDecibel, 0f, 100f);
+
+            for (int i = 0; i < _states.Length; i++)
+            {
+                if (levels != null && i < levels.Length) _states[i].Level = Mathf.Max(1, levels[i]);
+                if (hps != null && i < hps.Length) _states[i].CurrentHP = Mathf.Clamp(hps[i], 1f, _states[i].EffectiveMaxHP);
+                if (energies != null && i < energies.Length) _states[i].CurrentEnergy = Mathf.Clamp(energies[i], 0f, _states[i].Data.maxEnergy);
+            }
+
+            if (activeIdx >= 0 && activeIdx < _states.Length && activeIdx != ActiveIndex)
+            {
+                ApplyActiveIndex(activeIdx);
+            }
+            else
+            {
+                OnDecibelChanged?.Invoke(NormalizedDecibel);
+                OnSquadStatsChanged?.Invoke();
+            }
+        }
+
         public void DamageActiveAgent(float rawDamage)
         {
             if (ActiveState == null || rawDamage <= 0f) return;
@@ -271,7 +324,7 @@ namespace NeoVeil.Squad
             {
                 var payload = new DamagePayload
                 {
-                    RawDamage = ActiveAgent.attackPower * parryData.damageMultiplier * TeamAttackMultiplier,
+                    RawDamage = ActiveAttackPower * parryData.damageMultiplier * TeamAttackMultiplier,
                     RawDaze = parryData.baseDaze,
                     DazeMultiplier = ActiveAgent.dazeMultiplier,
                     StunDamageMultiplier = ActiveAgent.stunDamageMultiplier,
