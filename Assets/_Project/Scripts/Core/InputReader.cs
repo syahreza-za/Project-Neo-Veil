@@ -27,6 +27,9 @@ namespace NeoVeil.Core
         private InputAction _specialAction;
         private InputAction _ultimateAction;
         private InputAction _switchNextAction;
+        private InputAction _switchSlot1Action;
+        private InputAction _switchSlot2Action;
+        private InputAction _switchSlot3Action;
         private InputAction _interactAction;
 
         public Vector2 MoveInput => _moveAction != null ? _moveAction.ReadValue<Vector2>() : Vector2.zero;
@@ -40,6 +43,7 @@ namespace NeoVeil.Core
         public event Action OnSpecialPressed;
         public event Action OnUltimatePressed;
         public event Action OnSwitchNextPressed;
+        public event Action<int> OnSwitchSlotPressed;
         public event Action OnInteractPressed;
 
         private void OnEnable()
@@ -87,6 +91,9 @@ namespace NeoVeil.Core
             _specialAction = _gameplayMap.FindAction("Special");
             _ultimateAction = _gameplayMap.FindAction("Ultimate");
             _switchNextAction = _gameplayMap.FindAction("SwitchNext");
+            _switchSlot1Action = _gameplayMap.FindAction("SwitchSlot1");
+            _switchSlot2Action = _gameplayMap.FindAction("SwitchSlot2");
+            _switchSlot3Action = _gameplayMap.FindAction("SwitchSlot3");
             _interactAction = _gameplayMap.FindAction("Interact");
 
             BindCallbacks();
@@ -148,6 +155,14 @@ namespace NeoVeil.Core
             switchNext.AddBinding("<Keyboard>/c");
             switchNext.AddBinding("<Gamepad>/leftShoulder");
 
+            // Direct Squad Slot Switch (1, 2, 3)
+            var slot1 = map.AddAction("SwitchSlot1", InputActionType.Button);
+            slot1.AddBinding("<Keyboard>/1");
+            var slot2 = map.AddAction("SwitchSlot2", InputActionType.Button);
+            slot2.AddBinding("<Keyboard>/2");
+            var slot3 = map.AddAction("SwitchSlot3", InputActionType.Button);
+            slot3.AddBinding("<Keyboard>/3");
+
             // Interact (F / Gamepad East)
             var interact = map.AddAction("Interact", InputActionType.Button);
             interact.AddBinding("<Keyboard>/f");
@@ -164,6 +179,9 @@ namespace NeoVeil.Core
             if (_specialAction != null) _specialAction.performed += HandleSpecial;
             if (_ultimateAction != null) _ultimateAction.performed += HandleUltimate;
             if (_switchNextAction != null) _switchNextAction.performed += HandleSwitchNext;
+            if (_switchSlot1Action != null) _switchSlot1Action.performed += HandleSwitchSlot1;
+            if (_switchSlot2Action != null) _switchSlot2Action.performed += HandleSwitchSlot2;
+            if (_switchSlot3Action != null) _switchSlot3Action.performed += HandleSwitchSlot3;
             if (_interactAction != null) _interactAction.performed += HandleInteract;
         }
 
@@ -175,6 +193,9 @@ namespace NeoVeil.Core
             if (_specialAction != null) _specialAction.performed -= HandleSpecial;
             if (_ultimateAction != null) _ultimateAction.performed -= HandleUltimate;
             if (_switchNextAction != null) _switchNextAction.performed -= HandleSwitchNext;
+            if (_switchSlot1Action != null) _switchSlot1Action.performed -= HandleSwitchSlot1;
+            if (_switchSlot2Action != null) _switchSlot2Action.performed -= HandleSwitchSlot2;
+            if (_switchSlot3Action != null) _switchSlot3Action.performed -= HandleSwitchSlot3;
             if (_interactAction != null) _interactAction.performed -= HandleInteract;
         }
 
@@ -184,6 +205,9 @@ namespace NeoVeil.Core
         private void HandleSpecial(InputAction.CallbackContext _) => OnSpecialPressed?.Invoke();
         private void HandleUltimate(InputAction.CallbackContext _) => OnUltimatePressed?.Invoke();
         private void HandleSwitchNext(InputAction.CallbackContext _) => OnSwitchNextPressed?.Invoke();
+        private void HandleSwitchSlot1(InputAction.CallbackContext _) => OnSwitchSlotPressed?.Invoke(0);
+        private void HandleSwitchSlot2(InputAction.CallbackContext _) => OnSwitchSlotPressed?.Invoke(1);
+        private void HandleSwitchSlot3(InputAction.CallbackContext _) => OnSwitchSlotPressed?.Invoke(2);
         private void HandleInteract(InputAction.CallbackContext _) => OnInteractPressed?.Invoke();
     }
 }

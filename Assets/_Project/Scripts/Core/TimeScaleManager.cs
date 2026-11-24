@@ -132,6 +132,15 @@ namespace NeoVeil.Core
             OnSlowMotionTriggered?.Invoke(_activeSlowMoScale, duration);
         }
 
+        /// <summary>
+        /// Immediately cancels any ongoing slow-motion (e.g., when a Chain Attack prompt is resolved).
+        /// </summary>
+        public void ClearSlowMotion()
+        {
+            _slowMoTimer = 0f;
+            _activeSlowMoScale = 1f;
+        }
+
         public void SetPaused(bool paused)
         {
             _isPaused = paused;

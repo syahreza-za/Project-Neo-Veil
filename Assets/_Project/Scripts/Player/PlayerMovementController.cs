@@ -328,6 +328,40 @@ namespace NeoVeil.Player
             _isMovementLocked = locked;
         }
 
+        /// <summary>
+        /// Grants temporary invulnerability frames (e.g., during EX Special, Ultimate, or Defensive Assist Parry).
+        /// </summary>
+        public void GrantInvulnerability(float duration)
+        {
+            if (duration > 0f)
+            {
+                _iFrameTimer = Mathf.Max(_iFrameTimer, duration);
+            }
+        }
+
+        /// <summary>
+        /// Safely repositions the CharacterController and faces a target direction (used by Assist Parry & Chain Attack).
+        /// </summary>
+        public void SnapToPositionAndFace(Vector3 worldPos, Vector3 faceDirection)
+        {
+            if (_controller != null)
+            {
+                _controller.enabled = false;
+                transform.position = worldPos;
+                _controller.enabled = true;
+            }
+            else
+            {
+                transform.position = worldPos;
+            }
+
+            faceDirection.y = 0f;
+            if (faceDirection.sqrMagnitude > 0.001f)
+            {
+                transform.rotation = Quaternion.LookRotation(faceDirection.normalized, Vector3.up);
+            }
+        }
+
         private Vector3 GetCameraRelativeMoveDirection()
         {
             if (inputReader == null) return Vector3.zero;
