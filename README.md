@@ -6,7 +6,7 @@ Dibangun untuk **Unity 6 LTS (6000.0 LTS)** dengan **URP (Forward+)**, **Unity N
 
 ---
 
-## Status Pengembangan
+## Status Pengembangan — Seluruh 6 Fase Fondasi Selesai!
 
 - [x] **GDD & Arsitektur Teknis** — lihat [`docs/GDD.md`](docs/GDD.md)
 - [x] **Fase 1 — Movement, Dodge, Soft Lock-On & Combat Feel** — lihat [`SETUP_FASE1.md`](SETUP_FASE1.md)
@@ -14,11 +14,11 @@ Dibangun untuk **Unity 6 LTS (6000.0 LTS)** dengan **URP (Forward+)**, **Unity N
 - [x] **Fase 3 — Enemy AI, Golden/Red Telegraph, Defensive Assist Parry & Daze/Chain Attack** — lihat [`SETUP_FASE2_FASE3.md`](SETUP_FASE2_FASE3.md)
 - [x] **Fase 4 — Distrik Kota Semi-Open World, Siklus Neon Siang-Malam, Anomaly Rift & Fast Travel** — lihat [`SETUP_FASE4.md`](SETUP_FASE4.md)
 - [x] **Fase 5 — Markas Cafe 07, NPC, Dialog, Kontrak Misi, Upgrade Agen & Save/Load JSON** — lihat [`SETUP_FASE5.md`](SETUP_FASE5.md)
-- [ ] **Fase 6 — Anime Polish (VRoid + lilToon + URP Bloom + Audio/VFX + Build Demo)**
+- [x] **Fase 6 — Anime Polish (1-Click Bootstrap, Audio/BGM, VFX, Animator VRoid+Mixamo, URP Bloom & Build Demo)** — lihat [`SETUP_FASE6_POLISH.md`](SETUP_FASE6_POLISH.md)
 
 ---
 
-## Struktur Script (`Assets/_Project/Scripts/`)
+## Struktur Lengkap Script (`Assets/_Project/Scripts/`)
 
 ```text
 Assets/_Project/Scripts/
@@ -57,6 +57,11 @@ Assets/_Project/Scripts/
 │   ├── MissionDataSO.cs             # ScriptableObject kontrak misi utama & sampingan
 │   ├── MissionManager.cs            # Pelacak kontrak otomatis (Rift, Crate, Assist Parry, NPC)
 │   └── CityNpcInteractable.cs       # NPC interaktif kota & Cafe 07
+├── Polish/
+│   ├── UrbanAnimeSceneBootstrap.cs  # Generator 1-klik layout greybox District 07
+│   ├── CombatJuiceAndAudioBridge.cs # SFX combat, dynamic City↔Battle BGM & Camera Shake bridge
+│   ├── AgentAnimatorBridge.cs       # Jembatan otomatis Animator VRoid + Mixamo (1.25x ZZZ speed)
+│   └── CombatVfxSpawner.cs          # Spawner VFX Slash, Parry, Dodge & Chain + fallback pulsa neon
 └── UI/
     └── CombatHUDDebugOverlay.cs     # HUD lengkap greybox (Squad, Clock, Contracts, Dialogue, Fast Travel & Cafe Hub)
 ```
@@ -69,4 +74,5 @@ Assets/_Project/Scripts/
    ```bash
    git clone https://github.com/syahreza-za/Project-Neo-Veil.git
    ```
-2. Ikuti panduan berurutan: [`SETUP_FASE1.md`](SETUP_FASE1.md) → [`SETUP_FASE2_FASE3.md`](SETUP_FASE2_FASE3.md) → [`SETUP_FASE4.md`](SETUP_FASE4.md) → [`SETUP_FASE5.md`](SETUP_FASE5.md).
+2. Ikuti panduan berurutan:
+   [`SETUP_FASE1.md`](SETUP_FASE1.md) → [`SETUP_FASE2_FASE3.md`](SETUP_FASE2_FASE3.md) → [`SETUP_FASE4.md`](SETUP_FASE4.md) → [`SETUP_FASE5.md`](SETUP_FASE5.md) → [`SETUP_FASE6_POLISH.md`](SETUP_FASE6_POLISH.md).
